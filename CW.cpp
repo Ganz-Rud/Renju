@@ -34,20 +34,26 @@ int field(int f[15][15])
 
 int player(int f[15][15])
 {
-	char key;
-	cout << "Enter the pos of your turn (1-15) (1-15)" << endl;
-	int turnX, turnY;
-	do
-	{
+	int key;
+	int i = 0;
+	do{
+		i++;
+		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+		COORD start = { 0, 16+i };
+		SetConsoleCursorPosition(h, start);
+		cout << "Enter the pos of your turn (1-15) (1-15)" << endl;
+		int turnX, turnY;
 		cin >> turnX;
 		cin >> turnY;
-
-		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD c = { turnX, turnY };
+		COORD c = { (turnX*2)-1, turnY };
 		SetConsoleCursorPosition(h, c);
 		cin >> key;
-	} while (key == 13);
-	return 0;
+		if (key == 1){
+			f[turnX][turnY] = 1;
+			break;
+		}
+	} while (true);
+	return 1;
 }
 
 int main()
@@ -62,6 +68,7 @@ int main()
 	field(field_mass);
 
 	player(field_mass);
+	
 
 	cin.get();
 	cout << endl << endl << endl;
