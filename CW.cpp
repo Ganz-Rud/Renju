@@ -5,12 +5,29 @@
 
 using namespace std;
 
-//==отрисовка поля - готово=============================
+//=== для изменения цвета текста в cmd =================
+void SetColor(int text, int background) 
+{
+	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+}
+//======================================================
+
+//========= отрисовка поля =============================
 int field(int f[15][15])
 {
 	system("cls");
-	cout << " 1 2 3 4 5 6 7 8 9 A B C D E F" << endl;
+	int count = 1;
+	cout << "   1 2 3 4 5 6 7 8 9 A B C D E F" << endl;
 	for (int Y = 0; Y < 15; Y++){
+		if (count < 10)
+		{
+			cout << count << " ";
+		}
+		else {
+			cout << count;
+		}
+			count++;
 		for (int X = 0; X < 15; X++){
 			if (f[Y][X] == 0)
 			{
@@ -19,22 +36,26 @@ int field(int f[15][15])
 			else {
 				if (f[Y][X] == 1)
 				{
+					SetColor(4, 0);
 					cout << " X";
+					SetColor(15, 0);
 				}
 				else
 				{
+					SetColor(2, 0);
 					cout << " O";
+					SetColor(15, 0);
 				};
 			}
 		}
 		cout << endl;
 	}
-		
+	cout << "   1 2 3 4 5 6 7 8 9 A B C D E F" << endl;
 	return 0;
 }
 //======================================================
 
-//==игорок крестик (основной) - готово =================
+//==игорок крестик (основной)===========================
 int player(int f[15][15])
 {
 	int key;
@@ -42,30 +63,34 @@ int player(int f[15][15])
 	do{
 		i++;
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD start = { 0, 16+i };
-		SetConsoleCursorPosition(h, start);
-		cout <<"!ПЕРВЫЙ ИГРОК (Х)!" << endl << "Введите позиции для хода (горизонталь 1-15) (вертикаль 1-15)" <<endl << "Для подтверждения введите <1>. Для отмены - любую другую клавишу" << endl;
+		COORD с = { 0, 17+i };					
+		SetConsoleCursorPosition(h, с);		//позиция для надписи после вывода поля
+		cout <<"!ПЕРВЫЙ ИГРОК (Х)!" << endl << "Введите позиции для хода (горизонталь 1-15) (вертикаль 1-15)" << endl << "Для подтверждения введите <1>. Для отмены - любую другую клавишу" << endl;
 		int turnX, turnY;
-		while (true)			//===============защита ввода 
+		
+		//=======защита ввода 
+		while (true)							
 		{
 			cin >> turnX;
 			cin >> turnY;
-			if (((!turnX) || (turnX < 1) || (turnX > 15) || (!turnY) || (turnY < 1) || (turnY > 15)) || (f[turnY-1][turnX-1] != 0))
-			{
-				cout << "неверный ввод, возможно эта позиция занята, попробуйте ещё раз: \n";
+			if (((!turnX) || (turnX < 1) || (turnX > 15) || (!turnY) || (turnY < 1) || (turnY > 15)) || (f[turnY-1][turnX-1] != 0)) 
+			{								//условие не позволяющее ввести что либо кроме чисел от 1 до 15, и уже введённыйх позиций
+				cout << "НЕВЕРНЫЙ ВВОД (возможно эта позиция уже занята), попробуйте ещё раз: \n";
 				cin.clear();
 				while (cin.get() != '\n')
 					continue;
 				cin.sync();
 			}
 			else{ break; };
-		}						//===============защита ввода
-		COORD c = { (turnX*2)-1, turnY };
+		}										
+		//======конец защиты ввода
+
+		COORD c = { (turnX*2)+1, turnY };			//показывает позицию хода игрока на поле
 		SetConsoleCursorPosition(h, c);
 		cin.clear();
 		cin >> key;
 		if (key == 1){
-			f[turnY-1][turnX-1] = 1;
+			f[turnY-1][turnX-1] = 1;				//подтверждение хода
 			break;
 		}
 	} while (true);
@@ -73,7 +98,7 @@ int player(int f[15][15])
 }
 //======================================================
 
-//==игрок нолик (второй) - готов =======================
+//==игрок нолик (второй)(копия первого)=================
 int player2(int f[15][15])
 {
 	int key;
@@ -81,24 +106,24 @@ int player2(int f[15][15])
 	do{
 		i++;
 		HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD start = { 0, 16 + i };
-		SetConsoleCursorPosition(h, start);
+		COORD с = { 0, 17 + i };
+		SetConsoleCursorPosition(h, с);
 		cout << "!ВТОРОЙ ИГРОК (О)!" << endl << "Введите позиции для хода (горизонталь 1-15) (вертикаль 1-15)." << endl << "Для подтверждения введите <2>.Для отмены - любую другую клавишу" << endl;
 		int turnX, turnY;
-		while (true)			//===============защита ввода 
+		while (true)		
 		{
 			cin >> turnX;
 			cin >> turnY;
 			if (((!turnX) || (turnX < 1) || (turnX > 15) || (!turnY) || (turnY < 1) || (turnY > 15)) || (f[turnY - 1][turnX - 1] != 0))
 			{
-				cout << "неверный ввод, возможно эта позиция занята, попробуйте ещё раз: \n";
+				cout << "НЕВЕРНЫЙ ВВОД (возможно эта позиция уже занята), попробуйте ещё раз: \n";
 				cin.clear();
 				while (cin.get() != '\n')
 					continue;
 				cin.sync();
 			}
 			else{ break; };
-		}						//===============защита ввода
+		}						
 		COORD c = { (turnX * 2) - 1, turnY };
 		SetConsoleCursorPosition(h, c);
 		cin.clear();
@@ -112,7 +137,7 @@ int player2(int f[15][15])
 }
 //======================================================
 
-//====компьютер ход (нолик) ============================
+//==== компьютер ход ===================================
 int compRandAI(int f[15][15])
 {
 	int tempX = 0, tempY = 0;
@@ -318,6 +343,8 @@ int compRandAI(int f[15][15])
 			}
 		}
 	}
+	//================== проверка на ХХ_ХХ ====================================
+		
 
 	//======================== проверка на 3 ==================================
 
@@ -677,49 +704,49 @@ int compRandAI(int f[15][15])
 }
 //======================================================
 
-
-//отрисовка поля готова=================================
+//==========проверка на выигрыш=========================
 int check_for_win(int f[15][15])
 {
 	for (int Y = 0; Y < 15; Y++)
 	{
-		for (int X = 0; X < 15; X++)// проходим по массиву поля
+		for (int X = 0; X < 15; X++)			// проходим по полю
 		{
-			if (f[Y][X] != 0)	//если нашли элемент не равный 0 то начинаем проверять от него направления
+			if (f[Y][X] != 0)					// если нашли элемент не равный 0 то начинаем проверять от него направления
 			{
-				int count = 0; 
-				int check_point = f[Y][X]; // сохраняем проверяемое значение
+				int check_point = f[Y][X];		// сохраняем проверяемое значение
 				
-				//-----------------
+				//-----------------проверяет выигрышная ли СТРОКА--------------------
+				
+				int count = 0;
 				for (int temp = 0; temp < 5; temp++)
 				{
-					if (f[Y][X+temp] == check_point) { count++; }	else { break; } // проверяет выигрышная ли СТРОКА
+					if (f[Y][X+temp] == check_point) { count++; }	else { break; }
 				}
 				if (count == 5)
 				{
 					return check_point;
 				}
 				
-				// ---------------------
+				// ---------------------проверяет выигрышний ли СТОЛБЕЦ--------------
 
 				count = 0;
 				for (int temp = 0; temp < 5; temp++)
 				{
-					if (f[Y+temp][X] == check_point) {count++;} else { break; }	//проверяет выигрышний ли СТОЛБЕЦ
+					if (f[Y+temp][X] == check_point) {count++;} else { break; }
 				}
 				if (count == 5)
 				{
 					return check_point;
 				}
 				
-				//----------------------
+				//----------------------проверяет ГЛАВНУЮ диагональ------------------
 
 				count = 0;
 				int tempY = Y;
 				int tempX = X;
 				for (int temp = 0; temp < 5; temp++)
 				{
-					if (f[tempY][tempX] == check_point) //проверяет главную диагональ
+					if (f[tempY][tempX] == check_point) 
 					{ 
 						count++; 
 						tempY++;
@@ -732,13 +759,14 @@ int check_for_win(int f[15][15])
 					return check_point;
 				}
 				
-				// -----------------------
+				// ------------------проверяет ПОБОЧНУЮ ДИАГОНАЛЬ---------------------
+
 				count = 0;
 				tempY = Y;
 				tempX = X;
 				for (int temp = 0; temp < 5; temp++)
 				{
-					if (f[tempY][tempX] == check_point) //проверяет побочную диагональ
+					if (f[tempY][tempX] == check_point) 
 					{
 						count++;
 						tempY++;
@@ -763,20 +791,22 @@ int main()
 	//----------------------------------------------------
 	int field_mass[15][15];
 	for (int Y = 0; Y < 15;Y++)
-		for (int X = 0; X < 15; X++)		//создание поля
+		for (int X = 0; X < 15; X++)	   //создание поля
 			field_mass[Y][X] = 0;
 	//----------------------------------------------------
 	int winner = 0;
-	cout << "против кого играем?" <<endl;
-	int counter;
 	int menu_key;
-	while (1)
+	while (true)
 	{
 		system("cls");
+		cout << "=================================== РЕНДЗЮ =====================================" << endl << endl;
+		cout << "против кого играем?" << endl;
 		std::cout << "1 :игрок против компьютера" << std::endl;
 		std::cout << "2 :два игрока" << std::endl;
 		std::cout << ">";
-		while (true)			//===============защита ввода выбор с кем играть
+
+		//=========защита ввода выбора с кем играть============
+		while (true)			
 		{
 			std::cin >> menu_key;
 			if ((!menu_key) || (menu_key < 1) || (menu_key > 2))
@@ -789,7 +819,8 @@ int main()
 			}
 			else{ break; };
 		}
-		
+		//=========защита ввода выбора с кем играть============
+
 		switch (menu_key)
 		{
 		case 1:
@@ -799,17 +830,18 @@ int main()
 				field(field_mass);
 				player(field_mass);
 				winner = check_for_win(field_mass);
-				if (winner == 1)
+				if (winner == 1)					//проверка выиграл ли после своего хода
 				{
 					HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-					COORD start = { 0, 21 };
-					SetConsoleCursorPosition(h, start);
+					COORD с = { 0, 21 };
+					SetConsoleCursorPosition(h, с);
 					cout << "====================== ";
 					cout << "Вы победили!";
 					cout << " ======================";
 					break;
 				}
 				compRandAI(field_mass);
+				field(field_mass);
 				winner = check_for_win(field_mass);
 				if (winner == 2)
 				{
@@ -827,8 +859,8 @@ int main()
 			cout << endl << endl << endl;
 			system("pause");
 			return 0;
-
 		}
+
 		case 2:
 		{
 			while (true)
