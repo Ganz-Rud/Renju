@@ -93,8 +93,8 @@ int compRand(int f[15][15])
 
 int compRandAI(int f[15][15])
 {
-	int tempX, tempY;
-
+	int tempX = 0, tempY = 0;
+	//==========================проверка на 4 ===========================================
 	for (int Y = 0; Y < 15; Y++)
 	{
 		for (int X = 0; X < 15; X++)// проходим по массиву поля
@@ -103,65 +103,44 @@ int compRandAI(int f[15][15])
 			{
 				int count = 0;
 
-				//-----------------------------------------
 				for (int temp = 0; temp < 4; temp++)
 				{
 					if (f[Y][X + temp] == 1) { count++; }
 					else { break; }							// проверяет СТРОКУ
 				}
-				if (count == 4)
+				if (count == 4)									//строка. 4
 				{
-					if ((f[Y][X - 1] == 0) || ( X>0)){
+					if ((f[Y][X - 1] == 0) && (X > 0)){
 						f[Y][X - 1] = 2;
 						return 0;
 					}
-					else if ((f[Y][X + 4] == 0) || (X < 12)){
+					else if ((f[Y][X + 4] == 0) && (X < 12)){
 						f[Y][X + 4] = 2;
 						return 0;
 					}
 				}
-				else if (count == 3)
-				{
-					if ((f[Y][X - 1] == 0) || (X>0)){
-						f[Y][X - 1] = 2;
-						return 0;
-					}
-					else if ((f[Y][X + 3] == 0) || (X < 13)){
-						f[Y][X + 3] = 2;
-						return 0;
-				}
-				// -------------------------------------------
+				//===============
 				count = 0;
+				//===============
 				for (int temp = 0; temp < 4; temp++)
 				{
 					if (f[Y + temp][X] == 1) { count++; }
 					else { break; }	//проверяет  СТОЛБЕЦ
 				}
-				if (count == 4)
+				if (count == 4)									//столбец 4
 				{
-					if ((f[Y - 1][X] == 0) || (Y>0)){
+					if ((f[Y - 1][X] == 0) && (Y > 0)){
 						f[Y - 1][X] = 2;
 						return 0;
 					}
-					else if ((f[Y + 4][X] == 0) || (Y < 12)){
+					else if ((f[Y + 4][X] == 0) && (Y < 12)){
 						f[Y + 4][X] = 2;
 						return 0;
 					}
 				}
-				else if (count == 3)
-				{
-					if ((f[Y - 1][X] == 0) || (Y>0)){
-						f[Y - 1][X] = 2;
-						return 0;
-					}
-					else if ((f[Y + 3][X] == 0) || (Y < 13)){
-						f[Y + 3][X] = 2;
-						return 0;
-					}
-				}
-				//------------------------------------------
-
+				//===============
 				count = 0;
+				//===============
 				int tempY = Y;
 				int tempX = X;
 				for (int temp = 0; temp < 4; temp++)
@@ -174,33 +153,23 @@ int compRandAI(int f[15][15])
 					}
 					else { break; }
 				}
-				if (count == 4)
+				if (count == 4)											//главная 4
 				{
-					if ((f[Y - 1][X - 1] == 0) || (X>0) || (Y>0)){
+					if ((f[Y - 1][X - 1] == 0) && (X > 0) && (Y > 0)){
 						f[Y - 1][X - 1] = 2;
 						return 0;
 					}
-					else if ((f[Y + 4][X + 4] == 0) || (X<12) || (Y<12)){
-						f[tempY + 4][tempX + 4] = 2;
+					else if ((f[Y + 4][X + 4] == 0) && (X < 12) && (Y < 12)){
+						f[Y + 4][X + 4] = 2;
 						return 0;
 					}
 				}
-				else if (count == 3)
-				{
-					if ((f[Y - 1][X - 1] == 0) || (X>0) || (Y>0)){
-						f[Y - 1][X - 1] = 2;
-						return 0;
-					}
-					else if ((f[Y + 3][X + 3] == 0) || (X<13) || (Y<13)){
-						f[tempY + 3][tempX + 3] = 2;
-						return 0;
-					}
-				}
-				// ----------------------------------------------------------
-
+				//===============
+				count = 0;
+				//===============
 				tempY = Y;
 				tempX = X;
-				for (int temp = 0; temp < 4 ; temp++)
+				for (int temp = 0; temp < 4; temp++)
 				{
 					if (f[tempY][tempX] == 1) //проверяет побочную диагональ
 					{
@@ -210,38 +179,183 @@ int compRandAI(int f[15][15])
 					}
 					else { break; }
 				}
-				if (count == 4)
+				if (count == 4)											//побочная 4
 				{
-					if ((f[Y - 1][X + 1] == 0) || (X<15) || (Y>0)){
+					if ((f[Y - 1][X + 1] == 0) && (X < 15) && (Y>0)){
 						f[Y - 1][X + 1] = 2;
 						return 0;
 					}
-					else if ((f[Y + 4][X - 4] == 0) || (X>3) || (Y<12)){
+					else if ((f[Y + 4][X - 4] == 0) && (X > 3) && (Y < 12)){
 						f[Y + 4][X - 4] = 2;
 						return 0;
 					}
-				}
-				else if (count == 3)
-				{
-					if ((f[Y - 1][X + 1] == 0) || (X<15) || (Y>0)){
-						f[Y - 1][X + 1] = 2;
-						return 0;
-					}
-					else if ((f[Y + 3][X - 3] == 0) || (X>2) || (Y<13)){
-						f[Y + 3][X - 3] = 2;
-						return 0;
-					}
-				}
-				else
-				{
-
 				}
 			}
 		}
 	}
 
+	//======================== проверка на 3 ==================================
 
+	for (int Y = 0; Y < 15; Y++)
+	{
+		for (int X = 0; X < 15; X++) // проходим по массиву поля
+		{
+			//===============
+			int count = 0;
+			//===============
+			for (int temp = 0; temp < 3; temp++)
+			{
+				if (f[Y][X + temp] == 1) { count++; }
+				else { break; }							// проверяет СТРОКУ
+			}
+			if (count == 3)							//строка 3
+			{
+				if ((f[Y][X - 1] == 0) && (X > 0)){
+					f[Y][X - 1] = 2;
+					return 0;
+				}
+				else if ((f[Y][X + 3] == 0) && (X < 13)){
+					f[Y][X + 3] = 2;
+					return 0;
+				}
+			}
+
+			//===============
+			count = 0;
+			//===============
+			for (int temp = 0; temp < 3; temp++)
+			{
+				if (f[Y + temp][X] == 1) { count++; }
+				else { break; }	//проверяет  СТОЛБЕЦ
+			}
+			if (count == 3)							//столбец 3
+			{
+				if ((f[Y - 1][X] == 0) && (Y > 0)){
+					f[Y - 1][X] = 2;
+					return 0;
+				}
+				else if ((f[Y + 3][X] == 0) && (Y < 13)){
+					f[Y + 3][X] = 2;
+					return 0;
+				}
+			}
+			//===============
+			count = 0;
+			//===============
+			tempY = Y;
+			tempX = X;
+			for (int temp = 0; temp < 3; temp++)
+			{
+				if (f[tempY][tempX] == 1) //проверяет главную диагональ
+				{
+					count++;
+					tempY++;
+					tempX++;
+				}
+				else { break; }
+			}
+			if (count == 3)											//главная 3
+			{
+				if ((f[Y - 1][X - 1] == 0) && (X > 0) && (Y > 0)){
+					f[Y - 1][X - 1] = 2;
+					return 0;
+				}
+				else if ((f[Y + 3][X + 3] == 0) && (X < 13) && (Y < 13)){
+					f[Y + 3][X + 3] = 2;
+					return 0;
+				}
+			}
+
+			//===============
+			count = 0;
+			//===============
+
+			tempY = Y;
+			tempX = X;
+			for (int temp = 0; temp < 3; temp++)
+			{
+				if (f[tempY][tempX] == 1) //проверяет побочную диагональ
+				{
+					count++;
+					tempY++;
+					tempX--;
+				}
+				else { break; }
+			}
+			if (count == 3)											//побочная 3
+			{
+				if ((f[Y - 1][X + 1] == 0) && (X < 15) && (Y>0)){
+					f[Y - 1][X + 1] = 2;
+					return 0;
+				}
+				else if ((f[Y + 3][X - 3] == 0) && (X > 2) && (Y < 13)){
+					f[Y + 3][X - 3] = 2;
+					return 0;
+				}
+			}
+		}
+	}
+
+	//если не надо защищаться то
+	HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD start = { 0, 21 };
+	SetConsoleCursorPosition(h, start);
+	cout << "не нашёл куда поставить";
+	system("pause");
+	int count = 0;
+	
+	for (int R = 0; R < 15; R++){
+		for (int Q = 0; Q < 15; Q++){
+			if (f[R][Q] == 2)		//посчитаем сколько у нас уже стоит точек
+			{
+				count++;
+			}
+		}
+	}
+	if (count == 0) //если ноль то рандомно тыкаем в любую часть поля
+	{
+		while (true)
+		{
+			srand(time(0));
+			tempX = rand() % 15;
+			tempY = rand() % 15;
+			if (f[tempX][tempY] == 0)
+			{
+				f[tempY][tempX] = 2;
+				return 0;
+			}
+		}
+	}
+	else 
+	{												//если не ноль то ходим куда ниубудь рядом
+		for (int Z = 0; Z < 15; Z++){
+			for (int V = 0; V < 15; V++){
+				if ((f[Z][V] == 2) && (f[Z+1][V] == 0))
+				{
+					f[Z+1][V] = 2;
+					return 0;
+				}
+				else if ((f[Z][V] == 2) && (f[Z - 1][V] == 0))
+				{
+					f[Z-1][V] = 2;
+					return 0;
+				}
+				else if ((f[Z][V] == 2) && (f[Z][V-1] == 0))
+				{
+					f[Z][V - 1] = 2;
+					return 0;
+				}
+				else if ((f[Z][V] == 2) && (f[Z][V+1] == 0))
+				{
+					f[Z][V + 1] = 2;
+					return 0;
+				}
+			}
+		}
+	}
 }
+
+//======================================================
 
 int check_for_win(int f[15][15])
 {
@@ -297,7 +411,7 @@ int check_for_win(int f[15][15])
 				}
 				
 				// -----------------------
-
+				count = 0;
 				tempY = Y;
 				tempX = X;
 				for (int temp = 0; temp < 5; temp++)
@@ -349,7 +463,7 @@ int main()
 			break;
 		}
 
-		compRand(field_mass);
+		compRandAI(field_mass);
 		winner = check_for_win(field_mass);
 		if (winner == 2)
 		{
