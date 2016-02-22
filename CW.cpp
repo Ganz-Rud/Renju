@@ -124,7 +124,7 @@ int player2(int f[15][15])
 			}
 			else{ break; };
 		}						
-		COORD c = { (turnX * 2) - 1, turnY };
+		COORD c = { (turnX*2) + 1, turnY };
 		SetConsoleCursorPosition(h, c);
 		cin.clear();
 		cin >> key;
@@ -142,7 +142,7 @@ int compRandAI(int f[15][15])
 {
 	int tempX = 0, tempY = 0;
 
-	//=====================================проверка на 4 в ряд свои==============================
+	//=====================================проверка на 4 в ряд CВОИ ==============================
 
 	for (int Y = 0; Y < 15; Y++)
 	{
@@ -345,6 +345,127 @@ int compRandAI(int f[15][15])
 	}
 	//================== проверка на ХХ_ХХ ====================================
 		
+	for (int Y = 0; Y < 15; Y++)
+	{
+		for (int X = 0; X < 15; X++) // проходим по массиву поля
+		{
+			int count = 0;
+
+			for (int temp = 0; temp < 5; temp++)		//проверка СТОКИ
+			{
+				if (f[Y][X + temp] == 1) { count++; }
+			}
+			if (count == 4)			
+			{
+				if (f[Y][X + 1] == 0)		// X_XXX
+				{
+					f[Y][X + 1] = 2;
+					return 0;
+				}
+				else if (f[Y][X + 2] == 0)	// XX_XX
+				{
+					f[Y][X + 2] = 2;
+					return 0;
+				}
+				else if (f[Y][X + 3] == 0)	// XXX_X 
+				{
+					f[Y][X + 3] = 2;
+					return 0;
+				}
+			}
+			//-------------------------------
+			count = 0;
+
+			for (int temp = 0; temp < 5; temp++)
+			{
+				if (f[Y + temp][X] == 1) { count++; }
+													//проверяет  СТОЛБЕЦ
+			}
+			if (count == 4){
+				if (f[Y + 1][X] == 0)		// X_XXX
+				{
+					f[Y + 1][X] = 2;
+					return 0;
+				}
+				else if (f[Y + 2][X] == 0)	// XX_XX
+				{
+					f[Y + 2][X] = 2;
+					return 0;
+				}
+				else if (f[Y + 3][X] == 0)	// XXX_X 
+				{
+					f[Y + 3][X] = 2;
+					return 0;
+				}
+			}
+
+			//-----------------------
+			count = 0;
+
+			tempY = Y;
+			tempX = X;
+			for (int temp = 0; temp < 5; temp++)
+			{
+				if (f[tempY][tempX] == 1) //проверяет главную диагональ
+				{
+					count++;
+					tempY++;
+					tempX++;
+				}
+			}
+
+			if (count == 4)
+			{
+				if (f[Y + 1][X + 1] == 0)
+				{
+					f[Y + 1][X + 1] = 2;
+					return 0;
+				}
+				else if (f[Y + 2][X + 2] == 0)
+				{
+					f[Y + 2][X + 2] = 2;
+					return 0;
+				}
+				else if (f[Y + 3][X + 3] == 0)
+				{
+					f[Y + 3][X + 3] = 2;
+					return 0;
+				}
+			}
+			//-------------------------------
+
+			count = 0;
+			tempY = Y;
+			tempX = X;
+			for (int temp = 0; temp < 5; temp++)
+			{
+				if (f[tempY][tempX] == 1) //проверяет побочную диагональ
+				{
+					count++;
+					tempY++;
+					tempX--;
+				}		
+			}
+			if (count == 4){
+
+				if (f[Y - 1][X + 1] == 0)
+				{
+					f[Y - 1][X + 1] = 2;
+					return 0;
+				}
+				else if (f[Y - 2][X + 2] == 0)
+				{
+					f[Y - 2][X + 2] = 2;
+					return 0;
+				}
+				else if (f[Y - 3][X + 3] == 0)
+				{
+					f[Y - 3][X + 3] = 2;
+					return 0;
+				}
+			}
+		}
+	}
 
 	//======================== проверка на 3 ==================================
 
@@ -829,12 +950,14 @@ int main()
 			{
 				field(field_mass);
 				player(field_mass);
+				field(field_mass);
 				winner = check_for_win(field_mass);
 				if (winner == 1)					//проверка выиграл ли после своего хода
 				{
 					HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 					COORD с = { 0, 21 };
 					SetConsoleCursorPosition(h, с);
+					SetColor(4, 0);
 					cout << "====================== ";
 					cout << "Вы победили!";
 					cout << " ======================";
@@ -846,8 +969,9 @@ int main()
 				if (winner == 2)
 				{
 					HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-					COORD start = { 0, 21 };
-					SetConsoleCursorPosition(h, start);
+					COORD c = { 0, 21 };
+					SetConsoleCursorPosition(h, c);
+					SetColor(2, 0);
 					cout << "====================== ";
 					cout << "Победил компьютер :c";
 					cout << " ======================";
@@ -867,12 +991,14 @@ int main()
 			{
 				field(field_mass);
 				player(field_mass);
+				field(field_mass);
 				winner = check_for_win(field_mass);
 				if (winner == 1)
 				{
 					HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-					COORD start = { 0, 21 };
-					SetConsoleCursorPosition(h, start);
+					COORD c = { 0, 21 };
+					SetConsoleCursorPosition(h, c);
+					SetColor(4, 0);
 					cout << "====================== ";
 					cout << "Победил первый игорок (Х)!!";
 					cout << " ======================";
@@ -881,12 +1007,14 @@ int main()
 				}
 				field(field_mass);
 				player2(field_mass);
+				field(field_mass);
 				winner = check_for_win(field_mass);
 				if (winner == 2)
 				{
 					HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-					COORD start = { 0, 21 };
-					SetConsoleCursorPosition(h, start);
+					COORD c = { 0, 21 };
+					SetConsoleCursorPosition(h, c);
+					SetColor(2, 0);
 					cout << "====================== ";
 					cout << "Победил второй игрок (О)!!";
 					cout << " ======================";
